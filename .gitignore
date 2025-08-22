@@ -1,0 +1,3 @@
+# Non versionare dati runtime
+data/
+config/

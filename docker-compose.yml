@@ -1,0 +1,44 @@
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASS:-root}
+      MARIADB_DATABASE: ${DB_NAME:-nextcloud}
+      MARIADB_USER: ${DB_USER:-nc}
+      MARIADB_PASSWORD: ${DB_PASS:-nc}
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  nextcloud:
+    build:
+      context: .
+      dockerfile: Dockerfile.rp5
+    ports:
+      - "8080:80"
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: ${DB_NAME:-nextcloud}
+      MYSQL_USER: ${DB_USER:-nc}
+      MYSQL_PASSWORD: ${DB_PASS:-nc}
+      REDIS_HOST: redis
+      PHP_MEMORY_LIMIT: 1024M
+      PHP_UPLOAD_LIMIT: 2G
+      # imposta l'IP del tuo PC per Xdebug (VS Code)
+      XDEBUG_CLIENT_HOST: ${XDEBUG_CLIENT_HOST:-192.168.1.50}
+    volumes:
+      - nc_data:/var/www/html                      # dati Nextcloud
+      - ./apps:/var/www/html/custom_apps           # monta la tua app dal repo
+      # - ./config:/var/www/html/config            # opzionale se vuoi versionare config
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  nc_data:
