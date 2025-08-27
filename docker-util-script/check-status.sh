@@ -21,6 +21,7 @@ fi
 echo "ðŸ“„ Verifica config.php nel container..."
 docker compose exec -T nextcloud bash -c 'test -f /var/www/html/config/config.php && echo "âœ… config.php presente" || echo "âŒ config.php mancante"'
 
+
 echo "ðŸ” Trusted domains:"
 if ! docker compose exec -T nextcloud php occ config:system:get trusted_domains; then
   echo "âš ï¸ Errore nella lettura dei trusted domains (container forse non pronto)"
