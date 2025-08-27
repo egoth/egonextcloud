@@ -2,7 +2,7 @@
 #!/bin/bash
 
 # Nome del container
-CONTAINER_NAME="nextcloud"
+CONTAINER_NAME="egonextcloud-nextcloud-1"
 
 echo "➡️ Entrata nel container $CONTAINER_NAME..."
 
