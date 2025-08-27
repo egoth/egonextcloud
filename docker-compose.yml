@@ -33,6 +33,7 @@ services:
       PHP_UPLOAD_LIMIT: 2G
       XDEBUG_CLIENT_HOST: ${XDEBUG_CLIENT_HOST:-192.168.1.50}
     volumes:
+      - ./php-conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro   #  NUOVO
       # Dati Nextcloud (datadir interno rimane /var/www/html/data)
       - /srv/nextcloud/data:/var/www/html/data
       # Config e temi separati
