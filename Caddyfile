@@ -1,0 +1,36 @@
+egodom.hopto.org {
+
+	# Proxy verso il servizio "nextcloud" (porta 80 interna al compose)
+	reverse_proxy nextcloud:80
+
+	# Intestazioni raccomandate per Nextcloud
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		Referrer-Policy "no-referrer"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		X-XSS-Protection "1; mode=block"
+	}
+
+	# Reindirizzi "well-known" per caldav/carddav/webfinger/nodeinfo
+	@wellknown caldav carddav webfinger nodeinfo
+	handle_path /.well-known/{@wellknown} {
+		rewrite * /remote.php/{path}
+		uri strip_prefix /.well-known
+	}
+
+	handle_path /.well-known/webfinger {
+		redir /.well-known/nodeinfo 301
+	}
+
+	# Opzionale: aumenta il timeout proxy per upload grossi
+	# reverse_proxy {
+	#   to nextcloud:80
+	#   transport http {
+	#     read_timeout  3600s
+	#     write_timeout 3600s
+	#   }
+	# }
+
+	# Caddy gestisce automaticamente i certificati Let's Encrypt
+}
