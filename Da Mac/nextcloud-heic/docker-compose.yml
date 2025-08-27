@@ -1,0 +1,20 @@
+services:
+  nextcloud:
+    build: .
+    container_name: nextcloud_heic
+    ports:
+      - 8081:80
+      - 9443:443
+    entrypoint: "/bin/bash -c '/init-ssl.sh && /entrypoint.sh apache2-foreground'"
+    volumes:
+      - nextcloud_data:/var/www/html
+      - ./photo:/var/www/html/data
+      - /Users/ennio/nextcloud-server/certs:/etc/apache2/ssl:ro
+      - ./init-ssl.sh:/init-ssl.sh:ro
+
+
+    restart: unless-stopped
+
+volumes:
+  nextcloud_data:
+

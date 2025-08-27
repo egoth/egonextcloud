@@ -1,0 +1,43 @@
+
+services:
+  db:
+    image: mariadb:10.6
+    container_name: nextcloud_db
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    environment:
+      - MYSQL_ROOT_PASSWORD=Paperonzolo.1969
+      - MYSQL_PASSWORD=Paperonzolo.1969
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    volumes:
+      - db:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: nextcloud_app
+    restart: always
+    ports:
+      - 8080:80
+      - 8443:443
+    depends_on:
+      - db
+    volumes:
+      - ./nextcloud-data:/var/www/html
+      - ./certs:/etc/apache2/ssl:ro
+      - ./user-photos:/var/www/html/data/admin/files/Photos
+      - ./init-all.sh:/init-all.sh:ro
+    entrypoint: ["/bin/bash", "/init-all.sh"]
+    environment:
+      - MYSQL_PASSWORD=Paperonzolo.1969
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=db
+      - NEXTCLOUD_ADMIN_USER=admin
+      - NEXTCLOUD_ADMIN_PASSWORD=Paperonzolo.1969
+
+volumes:
+  db:
+  nextcloud-data:
+
+

@@ -7,11 +7,14 @@ services:
       MARIADB_USER: ${DB_USER:-nc}
       MARIADB_PASSWORD: ${DB_PASS:-nc}
     volumes:
-      - db_data:/var/lib/mysql
+      - /srv/nextcloud/db:/var/lib/mysql
     restart: unless-stopped
 
   redis:
     image: redis:7-alpine
+    # (opzionale, persistenza redis)
+    # volumes:
+    #   - /srv/nextcloud/redis:/data
     restart: unless-stopped
 
   nextcloud:
@@ -28,17 +31,14 @@ services:
       REDIS_HOST: redis
       PHP_MEMORY_LIMIT: 1024M
       PHP_UPLOAD_LIMIT: 2G
-      # imposta l'IP del tuo PC per Xdebug (VS Code)
       XDEBUG_CLIENT_HOST: ${XDEBUG_CLIENT_HOST:-192.168.1.50}
     volumes:
-      - nc_data:/var/www/html                      # dati Nextcloud
-      - ./apps:/var/www/html/custom_apps           # monta la tua app dal repo
-      # - ./config:/var/www/html/config            # opzionale se vuoi versionare config
-    depends_on:
-      - db
-      - redis
+      # Dati Nextcloud (datadir interno rimane /var/www/html/data)
+      - /srv/nextcloud/data:/var/www/html/data
+      # Config e temi separati
+      - /srv/nextcloud/config:/var/www/html/config
+      - /srv/nextcloud/themes:/var/www/html/themes
+      # La tua app custom dal repo (giÃ  lo usavi)
+      - ./apps:/var/www/html/custom_apps
+    depends_on: [db, redis]
     restart: unless-stopped
-
-volumes:
-  db_data:
-  nc_data:
