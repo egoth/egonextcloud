@@ -10,7 +10,7 @@ echo "➡️ Entrata nel container $CONTAINER_NAME..."
 sudo docker exec -u www-data -it $CONTAINER_NAME bash -c "
   cd /var/www/html && \
   php occ config:system:set trusted_domains 0 --value=localhost && \
-  php occ config:system:set trusted_domains 1 --value=192.168.1.188 && \
+  php occ config:system:set trusted_domains 1 --value=192.168.1.151 && \
   php occ config:system:set trusted_domains 2 --value=egodom.hopto.org
 "
 
