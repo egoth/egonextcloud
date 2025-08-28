@@ -3,39 +3,17 @@
   auto_https disable_redirects
 }
 
-# IP dell'host (quello che chiami dal browser)
-https://192.168.1.151 {
+egodom.hopto.org {
   tls {
     issuer internal
     protocols tls1.2
   }
-  import nextcloud_common
-}
 
-# IP del container caddy (compariva nei log: 172.18.0.5)
-https://172.18.0.5 {
-  tls {
-    issuer internal
-    protocols tls1.2
-  }
-  import nextcloud_common
-}
+  # well-known consigliati da Nextcloud
+  handle_path /.well-known/carddav  { redir /remote.php/dav 301 }
+  handle_path /.well-known/caldav   { redir /remote.php/dav 301 }
+  handle_path /.well-known/webfinger { redir /index.php/.well-known/webfinger 301 }
+  handle_path /.well-known/nodeinfo  { redir /index.php/.well-known/nodeinfo 301 }
 
-(nextcloud_common) {
-  # well-known essenziali per Nextcloud
-  handle_path /.well-known/carddav {
-    redir /remote.php/dav 301
-  }
-  handle_path /.well-known/caldav {
-    redir /remote.php/dav 301
-  }
-  handle_path /.well-known/webfinger {
-    redir /index.php/.well-known/webfinger 301
-  }
-  handle_path /.well-known/nodeinfo {
-    redir /index.php/.well-known/nodeinfo 301
-  }
-
-  # proxy verso Nextcloud nel network docker
   reverse_proxy nextcloud:80
 }
