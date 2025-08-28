@@ -3,22 +3,26 @@
   auto_https disable_redirects
 }
 
-# Host esplicito su IP della macchina host
+# IP dell'host (quello che chiami dal browser)
 https://192.168.1.151 {
   tls {
     issuer internal
-    # Inizia con TLS 1.2 per evitare l'alert interno; poi puoi aggiungere tls1.3
     protocols tls1.2
-    # Genera e gestisci anche questi certificati (utile quando il client non manda SNI)
-    certificates {
-      automate 192.168.1.151
-      automate 172.18.0.5
-    }
-    # Se la tua build di Caddy lo supporta, puoi aggiungere:
-    # default_sni 192.168.1.151
   }
+  import nextcloud_common
+}
 
-  # well-known essenziali
+# IP del container caddy (compariva nei log: 172.18.0.5)
+https://172.18.0.5 {
+  tls {
+    issuer internal
+    protocols tls1.2
+  }
+  import nextcloud_common
+}
+
+(nextcloud_common) {
+  # well-known essenziali per Nextcloud
   handle_path /.well-known/carddav {
     redir /remote.php/dav 301
   }
@@ -32,6 +36,6 @@ https://192.168.1.151 {
     redir /index.php/.well-known/nodeinfo 301
   }
 
-  # proxy a Nextcloud nel network Docker
+  # proxy verso Nextcloud nel network docker
   reverse_proxy nextcloud:80
 }
