@@ -1,17 +1,17 @@
 egodom.hopto.org {
-	encode zstd gzip
-	reverse_proxy nextcloud:80
+  encode zstd gzip
+  reverse_proxy nextcloud:80
 
-	header {
-		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-		Referrer-Policy "no-referrer"
-		X-Content-Type-Options "nosniff"
-		X-Frame-Options "SAMEORIGIN"
-		X-XSS-Protection "1; mode=block"
-	}
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Referrer-Policy "no-referrer"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "SAMEORIGIN"
+    X-XSS-Protection "1; mode=block"
+  }
 
-	handle_path /.well-known/carddav { redir /remote.php/dav 301 }
-	handle_path /.well-known/caldav  { redir /remote.php/dav 301 }
-	handle_path /.well-known/webfinger { redir /index.php/.well-known/webfinger 301 }
-	handle_path /.well-known/nodeinfo { redir /index.php/.well-known/nodeinfo 301 }
+  handle_path /.well-known/carddav { redir /remote.php/dav 301 }
+  handle_path /.well-known/caldav  { redir /remote.php/dav 301 }
+  handle_path /.well-known/webfinger { redir /index.php/.well-known/webfinger 301 }
+  handle_path /.well-known/nodeinfo { redir /index.php/.well-known/nodeinfo 301 }
 }
