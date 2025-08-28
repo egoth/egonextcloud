@@ -9,11 +9,6 @@ egodom.hopto.org {
     protocols tls1.2
   }
 
-  # well-known consigliati da Nextcloud
-  handle_path /.well-known/carddav  { redir /remote.php/dav 301 }
-  handle_path /.well-known/caldav   { redir /remote.php/dav 301 }
-  handle_path /.well-known/webfinger { redir /index.php/.well-known/webfinger 301 }
-  handle_path /.well-known/nodeinfo  { redir /index.php/.well-known/nodeinfo 301 }
-
+  
   reverse_proxy nextcloud:80
 }
