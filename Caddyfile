@@ -4,7 +4,9 @@
 }
 
 :443 {
-  tls internal
+  tls {
+    issuer internal
+    protocols tls1.2
+  }
   respond "ok" 200
 }
-
