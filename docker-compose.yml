@@ -44,19 +44,44 @@ services:
     depends_on: [db, redis]
     restart: unless-stopped
 
-  caddy:
-    image: caddy:2
+labels:
+      - "traefik.enable=true"
+
+      # Router HTTPS (terminazione TLS in Traefik)
+      - "traefik.http.routers.nc.rule=Host(`egodom.hopto.org`)"
+      - "traefik.http.routers.nc.entrypoints=websecure"
+      - "traefik.http.routers.nc.tls=true"
+
+      # Servizio: porta interna del container Nextcloud
+      - "traefik.http.services.nc.loadbalancer.server.port=80"
+
+      # (opzionale) Router HTTP -> redirect a HTTPS (utile in LAN)
+      - "traefik.http.routers.nc-http.rule=Host(`egodom.hopto.org`)"
+      - "traefik.http.routers.nc-http.entrypoints=web"
+      - "traefik.http.routers.nc-http.middlewares=nc-redirect-https"
+      - "traefik.http.middlewares.nc-redirect-https.redirectscheme.scheme=https"
+
+traefik:
+    image: traefik:v2.10
+    restart: unless-stopped
+    command:
+      - "--log.level=DEBUG"
+      - "--api.dashboard=true"
+
+      # Provider Docker
+      - "--providers.docker=true"
+      - "--providers.docker.exposedByDefault=false"
+
+      # EntryPoints
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+
+      # Niente ACME/Let's Encrypt (non usiamo DNS pubblico)
+      # Traefik userà un certificato di default (self-signed)
     ports:
       - "80:80"
       - "443:443"
+      # (opzionale) dashboard traefik su 8080 solo LAN:
+      - "8080:8080"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - nextcloud
-    restart: unless-stopped
-
-volumes:
-  caddy_data:
-  caddy_config:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
