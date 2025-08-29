@@ -74,6 +74,9 @@ services:
       # EntryPoints
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
+      - "--accesslog=true"
+      - "--accesslog.fields.defaultmode=keep"
+
 
       # Niente ACME/Let's Encrypt (non usiamo DNS pubblico)
       # Traefik userà un certificato di default (self-signed)
