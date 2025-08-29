@@ -1,4 +1,3 @@
-@'
 <?xml version="1.0"?>
 <info>
   <id>egonextapp</id>
@@ -6,14 +5,14 @@
   <summary>App di test Nextcloud</summary>
   <description>La mia prima app Nextcloud di esempio</description>
   <licence>agpl</licence>
-  <author>Il tuo nome</author>
+  <author>Ennio</author>
   <version>0.1.0</version>
   <namespace>EgoNextApp</namespace>
   <dependencies>
-    <nextcloud min-version="28" max-version="30"/>
+    <nextcloud min-version="28" max-version="31"/>
   </dependencies>
   <types>
     <files/>
   </types>
 </info>
-'@ | Set-Content -Encoding UTF8 apps\egonextapp\appinfo\info.xml
+
