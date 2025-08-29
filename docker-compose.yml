@@ -44,7 +44,7 @@ services:
     depends_on: [db, redis]
     restart: unless-stopped
 
-labels:
+    labels:
       - "traefik.enable=true"
 
       # Router HTTPS (terminazione TLS in Traefik)
@@ -61,7 +61,7 @@ labels:
       - "traefik.http.routers.nc-http.middlewares=nc-redirect-https"
       - "traefik.http.middlewares.nc-redirect-https.redirectscheme.scheme=https"
 
-traefik:
+  traefik:
     image: traefik:v2.10
     restart: unless-stopped
     command:
