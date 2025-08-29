@@ -5,5 +5,8 @@ namespace OCA\EgoNextApp\AppInfo;
 
 use OCP\Util;
 
-// carica il JS "main.js" (senza estensione) in tutte le pagine
+// log in nextcloud.log
+\OC::$server->getLogger()->info('[egonextapp] app.php caricato');
+
+// carica il JS
 Util::addScript('egonextapp', 'main');
