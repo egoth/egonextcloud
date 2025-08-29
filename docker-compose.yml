@@ -21,8 +21,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.rp5
-    ports:
-      - "8080:80"
+   
     environment:
       MYSQL_HOST: db
       MYSQL_DATABASE: ${DB_NAME:-nextcloud}
@@ -82,6 +81,6 @@ services:
       - "80:80"
       - "443:443"
       # (opzionale) dashboard traefik su 8080 solo LAN:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
