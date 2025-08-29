@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<info>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <id>egonextapp</id>
   <name>Ego Next App</name>
   <summary>App di test Nextcloud</summary>
@@ -9,10 +9,10 @@
   <version>0.1.0</version>
   <namespace>EgoNextApp</namespace>
   <dependencies>
-    <nextcloud min-version="28" max-version="31"/>
+    <php min-version="8.1"/>
+    <nextcloud min-version="28" max-version="30"/>
   </dependencies>
   <types>
     <files/>
   </types>
 </info>
-
