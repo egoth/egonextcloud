@@ -73,7 +73,7 @@ services:
 
       # EntryPoints
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.address=:8888"
       - "--accesslog=true"
       - "--accesslog.fields.defaultmode=keep"
 
@@ -82,7 +82,7 @@ services:
       # Traefik userà un certificato di default (self-signed)
     ports:
       - "80:80"
-      - "443:443"
+      - "8888:8888"
       # (opzionale) dashboard traefik su 8080 solo LAN:
       - "127.0.0.1:8080:8080"
     volumes:
