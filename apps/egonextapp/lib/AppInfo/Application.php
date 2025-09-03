@@ -1,4 +1,4 @@
-@'
+
 <?php
 namespace OCA\EgoNextApp\AppInfo;
 use OCP\AppFramework\App;
@@ -9,4 +9,4 @@ class Application extends App {
         parent::__construct(self::APP_ID, $urlParams);
     }
 }
-'@ | Set-Content -Encoding UTF8 apps\egonextapp\lib\AppInfo\Application.php
+
