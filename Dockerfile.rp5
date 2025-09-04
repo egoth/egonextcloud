@@ -9,13 +9,13 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 # Xdebug: il client (VS Code) è sul tuo PC; imposta host via env
-RUN { \
-  echo "zend_extension=$(php -r 'echo ini_get(\"extension_dir\");')/xdebug.so"; \
-  echo "xdebug.mode=debug,develop"; \
-  echo "xdebug.start_with_request=trigger"; \
-  echo "xdebug.client_port=9003"; \
-  echo "xdebug.client_host=${XDEBUG_CLIENT_HOST}"; \
-} > /usr/local/etc/php/conf.d/xdebug.ini
+#RUN { \
+#  echo "zend_extension=$(php -r 'echo ini_get(\"extension_dir\");')/xdebug.so"; \
+ # echo "xdebug.mode=debug,develop"; \
+ # echo "xdebug.start_with_request=trigger"; \
+#  echo "xdebug.client_port=9003"; \
+#  echo "xdebug.client_host=${XDEBUG_CLIENT_HOST}"; \
+#} > /usr/local/etc/php/conf.d/xdebug.ini
 
 # Directory per le custom apps (il repo le monterà come volume)
 RUN mkdir -p /var/www/html/custom_apps && chown -R www-data:www-data /var/www/html
