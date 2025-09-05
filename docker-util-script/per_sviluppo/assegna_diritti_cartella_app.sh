@@ -3,3 +3,5 @@ docker compose exec nextcloud bash -lc '
   find /var/www/html/custom_apps/egonextapp -type d -exec chmod 755 {} \; &&
   find /var/www/html/custom_apps/egonextapp -type f -exec chmod 644 {} \;
 '
+
+chown -R www-data:www-data apps
