@@ -16,6 +16,8 @@ class FilesLoadAdditionalScriptsListener implements IEventListener {
 		if (!($event instanceof LoadAdditionalScripts)) {
 			return;
 		}
+        \OC::$server->getLogger()->info('[egonextapp] LoadAdditionalScripts fired - adding main.js');
+    
 		// include apps/egonextapp/js/main.js
 		Util::addScript('egonextapp', 'main');
 	}

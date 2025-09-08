@@ -19,14 +19,15 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function register(IRegistrationContext $context): void {
-		// Quando si apre la Files app, fai caricare i tuoi JS
-		$context->registerEventListener(
-			LoadAdditionalScripts::class,
-			FilesLoadAdditionalScriptsListener::class
-		);
-	}
+        \OC::$server->getLogger()->info('[egonextapp] Application::register');
+        $context->registerEventListener(
+            \OCA\Files\Event\LoadAdditionalScripts::class,
+            \OCA\EgoNextApp\Listener\FilesLoadAdditionalScriptsListener::class
+    );
+    }
 
-	public function boot(IBootContext $context): void {
-		// eventuale bootstrap runtime (non necessario qui)
-	}
+    public function boot(IBootContext $context): void {
+        \OC::$server->getLogger()->info('[egonextapp] Application::boot');
+    }
+
 }
