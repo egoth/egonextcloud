@@ -5,6 +5,7 @@ namespace OCA\EgoNextApp\AppInfo;
 
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrapContext;
 use OCP\Util;
@@ -16,14 +17,15 @@ class Application extends App implements IBootstrap {
         parent::__construct(self::APP_ID);
     }
 
-    public function register(IBootContext $context): void {
+    // ✅ qui usi IRegistrationContext, non IBootContext
+    public function register(IRegistrationContext $context): void {
         \OC::$server->getLogger()->info('[egonextapp] Application::register');
     }
 
     public function boot(IBootstrapContext $context): void {
         \OC::$server->getLogger()->info('[egonextapp] Application::boot');
 
-        // Carica il JS in tutte le pagine
+        // carica il JS del tuo pacchetto
         Util::addScript(self::APP_ID, 'main');
     }
 }
