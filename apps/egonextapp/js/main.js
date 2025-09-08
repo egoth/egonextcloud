@@ -1,10 +1,8 @@
 console.log("[egonextapp] main.js caricato correttamente");
 
-// Quando la pagina è pronta
 document.addEventListener("DOMContentLoaded", () => {
   console.log("[egonextapp] DOM caricato");
 
-  // Registriamo una nuova azione nel menu file
   if (OC && OCA && OCA.Files && OCA.Files.fileActions) {
     console.log("[egonextapp] Registro azione nel menu contestuale");
 
