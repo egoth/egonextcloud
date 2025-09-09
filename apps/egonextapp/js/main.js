@@ -1,14 +1,8 @@
 console.log('[egonextapp] main.js caricato');
 
-(function () {
-    function registerAction() {
-        if (typeof OCA === 'undefined' || !OCA.Files || !OCA.Files.FileActions) {
-            console.warn('[egonextapp] OCA.Files.FileActions non è disponibile, riprovo...');
-            setTimeout(registerAction, 500);
-            return;
-        }
-
-        console.log('[egonextapp] Registro azione con FileActions');
+OC.Plugins.register('OCA.Files.FileList', {
+    attach: function (fileList) {
+        console.log('[egonextapp] attach su FileList');
 
         OCA.Files.FileActions.registerAction({
             id: 'egonextapp-action',
@@ -17,13 +11,8 @@ console.log('[egonextapp] main.js caricato');
             mime: 'all',
             permissions: OC.PERMISSION_READ,
             actionHandler: (fileName, context) => {
-                OC.dialogs.alert(
-                    'Hai cliccato su: ' + fileName,
-                    'Ego Next App'
-                );
+                OC.dialogs.alert('Hai cliccato su: ' + fileName, 'Ego Next App');
             }
         });
     }
-
-    document.addEventListener('DOMContentLoaded', registerAction);
-})();
+});
