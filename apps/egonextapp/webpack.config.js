@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   entry: './src/main.js',
@@ -10,15 +10,23 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: /(node_modules)/,
         use: {
           loader: 'babel-loader',
-          options: { presets: ['@babel/preset-env'] }
-        }
-      }
-    ]
+          options: {
+            presets: [
+              ['@babel/preset-env', {
+                targets: {
+                  browsers: ['extends @nextcloud/browserslist-config'],
+                },
+              }],
+            ],
+          },
+        },
+      },
+    ],
   },
   resolve: {
-    extensions: ['.js']
-  }
-}
+    extensions: ['.js'],
+  },
+};
