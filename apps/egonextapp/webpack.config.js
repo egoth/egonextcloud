@@ -1,5 +1,6 @@
 // webpack.config.js
 const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   mode: 'production',
@@ -11,26 +12,18 @@ module.exports = {
   target: 'web',
   resolve: {
     fallback: {
-      // Polyfill per moduli Node usati da @nextcloud/files
       path: require.resolve('path-browserify'),
       string_decoder: require.resolve('string_decoder/'),
-      // Se in futuro compaiono altri simili errori (“Module not found: stream/buffer/crypto…”)
-      // aggiungi i corrispondenti fallback qui
-      // es.: stream: require.resolve('stream-browserify'),
-      //      buffer: require.resolve('buffer/'),
+      buffer: require.resolve('buffer/'),
+      // Se in futuro compaiono altri moduli Node:
+      // stream: require.resolve('stream-browserify'),
+      // crypto: require.resolve('crypto-browserify'),
     },
   },
-  module: {
-    rules: [
-      // Se usi Babel:
-      // {
-      //   test: /\.m?js$/,
-      //   exclude: /node_modules/,
-      //   use: {
-      //     loader: 'babel-loader',
-      //     options: { presets: ['@babel/preset-env'] }
-      //   }
-      // }
-    ],
-  },
+  plugins: [
+    // Rende disponibile Buffer globalmente (alcuni pacchetti se lo aspettano)
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
+  ],
 }
