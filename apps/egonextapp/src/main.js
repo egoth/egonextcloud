@@ -48,7 +48,9 @@ registerFileAction({
   iconSvgInline: icon,
   // quando mostrarla: qui SOLO per un singolo elemento e se è un file
   enabled: (nodes /* array di File/Folder */, _view) => {
-    return nodes.length === 1 && nodes[0].type === 'file'
+    console.info('[egonextapp] file action abilitata')
+    return true
+    //return nodes.length === 1 && nodes[0].type === 'file'
   },
   // cosa fare al click
   exec: async (nodes, _view) => {
