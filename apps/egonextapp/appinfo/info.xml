@@ -15,4 +15,8 @@
   <types>
     <files/>
   </types>
+  <scripts>
+    <script>js/main.js</script>
+  </scripts>
+
 </info>

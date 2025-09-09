@@ -1,17 +1,27 @@
+// apps/egonextapp/src/main.js
+
 import { registerFileAction } from '@nextcloud/files'
-import { showInfo } from '@nextcloud/dialogs'
-import { translate as t } from '@nextcloud/l10n'
 
-console.log('[egonextapp] main.js caricato')
+console.info('[egonextapp] main.js caricato')
 
-// registra azione nel menu contestuale dei file
+// Registriamo una nuova azione
 registerFileAction({
     id: 'egonextapp-action',
-    displayName: t('egonextapp', 'Mostra messaggio'),
-    icon: 'icon-info',
-    enabled: (nodes, view) => true,
-    exec: async (nodes, view) => {
-        const fileNames = nodes.map(node => node.basename).join(', ')
-        showInfo(`Hai cliccato su: ${fileNames}`)
+    displayName: t('egonextapp', 'Ego Next Action'), // usa la traduzione NC
+    iconSvgInline: `
+        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
+            <text x="8" y="11" font-size="7" text-anchor="middle" fill="currentColor">E</text>
+        </svg>
+    `,
+    exec: (fileInfo) => {
+        OC.dialogs.alert(
+            `Hai cliccato su: ${fileInfo.basename}`,
+            'EgoNextApp'
+        )
+    },
+    // sempre attiva (puoi filtrare per tipo file, ecc.)
+    enabled: (fileInfo, view) => {
+        return true
     },
 })
