@@ -1,12 +1,12 @@
-// apps/egonextapp/src/main.js
+import type { Entry } from '@nextcloud/files'
+import { addNewFileMenuEntry } from '@nextcloud/files'
+import { t } from '@nextcloud/l10n'
 
-import { registerFileAction } from '@nextcloud/files'
 
 console.info('[egonextapp] main.js caricato')
 
-// Registriamo una nuova azione
-registerFileAction({
-    id: 'egonextapp-action',
+const myEntry: Entry = {
+	 id: 'egonextapp-action',
     displayName: t('egonextapp', 'Ego Next Action'), // usa la traduzione NC
     iconSvgInline: `
         <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
@@ -14,14 +14,19 @@ registerFileAction({
             <text x="8" y="11" font-size="7" text-anchor="middle" fill="currentColor">E</text>
         </svg>
     `,
-    exec: (fileInfo) => {
+	handler(context: Folder, content: Node[]): void {
+
+
+		// `context` is the current active folder
+		// `content` is the content of the currently active folder
+		// You can add new files here e.g. use the WebDAV functions to create files.
+		// If new content is added, ensure to emit the event-bus signals so the files app can update the list.
         OC.dialogs.alert(
-            `Hai cliccato su: ${fileInfo.basename}`,
+            `Hai cliccato `,
             'EgoNextApp'
         )
-    },
-    // sempre attiva (puoi filtrare per tipo file, ecc.)
-    enabled: (fileInfo, view) => {
-        return true
-    },
-})
+            
+    }
+}
+
+addNewFileMenuEntry(myEntry)
