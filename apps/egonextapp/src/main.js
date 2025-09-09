@@ -26,5 +26,4 @@ try{
     console.info('[egonextapp] aggiunto')
 }catch(e){
     console.info('[egonextapp] errore')
-try{
 }
