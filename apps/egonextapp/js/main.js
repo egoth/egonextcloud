@@ -1,18 +1,12 @@
 console.log('[egonextapp] main.js caricato');
 
-// Aspetta che le file actions siano pronte
-$(document).on('fileActionsReady', function (event, fileActions) {
-    console.log('[egonextapp] fileActionsReady triggerato');
+// attende caricamento pagina file
+$(document).ready(function () {
+    console.log('[egonextapp] document ready');
 
-    fileActions.registerAction({
-        id: 'egonextapp-action',
-        displayName: t('egonextapp', 'Mostra messaggio'),
-        iconClass: 'icon-info',
-        mime: 'all',
-        permissions: OC.PERMISSION_READ,
-        actionHandler: (fileName, context) => {
-            console.log('[egonextapp] azione eseguita su', fileName);
-            OC.dialogs.alert('Hai cliccato su: ' + fileName, 'Ego Next App');
-        }
-    });
+    if (OCA.Files && OCA.Files.fileActions) {
+        console.log('[egonextapp] OCA.Files.fileActions disponibile');
+    } else {
+        console.error('[egonextapp] OCA.Files.fileActions NON disponibile');
+    }
 });
