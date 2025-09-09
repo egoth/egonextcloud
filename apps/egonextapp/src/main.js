@@ -45,7 +45,13 @@ registerFileAction({
   // etichetta nel menu; può essere stringa o funzione (nodes)=>string
   displayName: () => t('egonextapp', 'Ego Next Action'),
   // opzionale: icona
-  iconSvgInline: icon,
+  iconSvgInline: `
+<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"
+     xmlns="http://www.w3.org/2000/svg">
+  <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
+  <text x="8" y="11" font-size="7" text-anchor="middle" fill="currentColor">E</text>
+</svg>
+`,
   // quando mostrarla: qui SOLO per un singolo elemento e se è un file
   enabled: (nodes /* array di File/Folder */, _view) => {
     console.info('[egonextapp] file action abilitata')
