@@ -20,4 +20,11 @@ const myEntry = {
     }
 }
 
-addNewFileMenuEntry(myEntry)
+console.info('[egonextapp] sto per aggiungere')
+try{
+    addNewFileMenuEntry(myEntry)
+    console.info('[egonextapp] aggiunto')
+}catch(e){
+    console.info('[egonextapp] errore')
+try{
+}
