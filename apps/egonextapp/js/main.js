@@ -1,22 +1,26 @@
-console.log("[egonextapp] main.js caricato correttamente");
+console.log('[egonextapp] main.js caricato');
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("[egonextapp] DOM caricato");
+(function () {
+    function registerAction() {
+        if (typeof OCA === 'undefined' || typeof OCA.Files === 'undefined') {
+            console.warn('[egonextapp] OCA.Files non è disponibile, riprovo...');
+            setTimeout(registerAction, 500);
+            return;
+        }
 
-  if (OC && OCA && OCA.Files && OCA.Files.fileActions) {
-    console.log("[egonextapp] Registro azione nel menu contestuale");
+        console.log('[egonextapp] Registro azione in OCA.Files');
 
-    OCA.Files.fileActions.registerAction({
-      name: 'EgoNextTest',
-      displayName: t('egonextapp', 'Ego Next App'),
-      mime: 'all',
-      permissions: OC.PERMISSION_READ,
-      iconClass: 'icon-add',
-      actionHandler: function (filename, context) {
-        alert("Hai cliccato su: " + filename);
-      }
-    });
-  } else {
-    console.error("[egonextapp] OCA.Files non è disponibile. Sei nella vista Files?");
-  }
-});
+        OCA.Files.fileActions.registerAction({
+            name: 'EgoNextAppAction',
+            displayName: t('egonextapp', 'Mostra messaggio'),
+            mime: 'all',
+            permissions: OC.PERMISSION_READ,
+            iconClass: 'icon-info',
+            actionHandler: function (fileName, context) {
+                OC.dialogs.alert('Hai cliccato su: ' + fileName, 'Ego Next App');
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', registerAction);
+})();
