@@ -18,6 +18,28 @@ class Application extends App implements IBootstrap {
 
     public function register(IRegistrationContext $context): void {
         \OC::$server->getLogger()->info('[egonextapp] Application::register');
+        
+        
+        //per registrazione upload
+        $context->registerService(CodaMapper::class, function($c) {
+            return new CodaMapper($c->get(IDBConnection::class));
+        });
+        $context->registerService(CodaService::class, function($c) {
+            return new CodaService($c->get(CodaMapper::class));
+        });
+        $context->registerService(FileEventsListener::class, function($c) {
+            return new FileEventsListener(
+                $c->get(CodaService::class),
+                $c->get(IUserSession::class),
+            );
+        });
+
+        // Eventi file: nuovi file e scritture
+        $context->registerEventListener(NodeCreatedEvent::class, FileEventsListener::class);
+        $context->registerEventListener(NodeWrittenEvent::class, FileEventsListener::class);
+
+
+
     }
 
     public function boot(IBootContext $context): void {

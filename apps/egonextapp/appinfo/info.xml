@@ -6,7 +6,7 @@
   <description>Aggiunge un'azione contestuale ai file</description>
   <licence>agpl</licence>
   <author>Ennio</author>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
   <namespace>EgoNextApp</namespace>
   <dependencies>
     <php min-version="8.1"/>
