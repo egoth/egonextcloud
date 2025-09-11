@@ -47,5 +47,30 @@ class Application extends App implements IBootstrap {
 
         // carica lo script JS
         Util::addScript(self::APP_ID, 'main');
+
+        $dispatcher = $context->getServerContainer()->get(IEventDispatcher::class);
+
+        // Evento PRIMA dell’upload
+        $dispatcher->addListener(BeforeFileScannedEvent::class, function(BeforeFileScannedEvent $event) {
+            $file = $event->getFile();
+            \OC::$server->getLogger()->info("[egonextapp] Inizio upload file: " . $file->getPath());
+        });
+
+        // Evento DOPO creazione nuovo file
+        $dispatcher->addListener(FileCreatedEvent::class, function(FileCreatedEvent $event) {
+            $file = $event->getFile();
+            \OC::$server->getLogger()->info("[egonextapp] File creato: " . $file->getPath() . " (" . $file->getSize() . " bytes)");
+        });
+
+        // Evento DOPO scrittura (anche overwrite)
+        $dispatcher->addListener(FileWrittenEvent::class, function(FileWrittenEvent $event) {
+            $file = $event->getFile();
+            \OC::$server->getLogger()->info("[egonextapp] File scritto/aggiornato: " . $file->getPath());
+        });
+
+
+
+
+
     }
 }
