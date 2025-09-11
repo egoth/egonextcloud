@@ -9,6 +9,7 @@ use OCP\Files\Events\Node\NodeCreatedEvent;
 use OCP\Files\Events\Node\NodeWrittenEvent;
 use OCP\Files\FileInfo;
 use OCP\IUserSession;
+use OCP\ILogger;
 use OCA\EgoNextApp\Service\CodaService;
 
 class FileEventsListener implements IEventListener {
@@ -35,7 +36,16 @@ class FileEventsListener implements IEventListener {
         $mime  = (string)$node->getMimetype();
         $mtime = (int)$node->getMTime();
 
+  // Log che il file è in upload/scritto
+        $eventType = $event instanceof NodeCreatedEvent ? 'CREATED' : 'WRITTEN';
+        $this->logger->info("[egonextapp] File {$eventType}: user={$userId}, path={$path}, size={$size}, mime={$mime}, mtime={$mtime}");
+
+
+
         // Inserisci una riga in coda
         $this->codaService->enqueue($userId, $path, $size, $mime, $mtime);
+
+
+        $this->logger->debug("[egonextapp] File aggiunto in coda: {$path}");
     }
 }
