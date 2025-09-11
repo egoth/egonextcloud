@@ -20,7 +20,8 @@ class Version0001Date20250909 extends SimpleMigrationStep {
         $table = $schema->createTable('egonextapp_coda');
         $table->addColumn('id', 'integer', ['autoincrement' => true, 'notnull' => true]);
         $table->addColumn('user_id', 'string', ['length' => 64, 'notnull' => true]);
-        $table->addColumn('path', 'string', ['length' => 4096, 'notnull' => true]);
+        $table->addColumn('path', 'string', ['length' => 4000, 'notnull' => true]);
+    
         $table->addColumn('size', 'bigint', ['notnull' => true, 'default' => 0]);
         $table->addColumn('mimetype', 'string', ['length' => 255, 'notnull' => true, 'default' => '']);
         $table->addColumn('mtime', 'bigint', ['notnull' => true, 'default' => 0]);
