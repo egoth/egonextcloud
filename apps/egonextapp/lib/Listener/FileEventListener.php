@@ -19,6 +19,8 @@ class FileEventsListener implements IEventListener {
     ) {}
 
     public function handle(Event $event): void {
+        try{
+
         if (!($event instanceof NodeCreatedEvent || $event instanceof NodeWrittenEvent)) {
             return;
         }
@@ -47,5 +49,12 @@ class FileEventsListener implements IEventListener {
 
 
         $this->logger->debug("[egonextapp] File aggiunto in coda: {$path}");
+         } catch (\Throwable $e) {
+        // cattura qualunque eccezione o errore
+        $this->logger->error(
+            "[egonextapp] Errore durante la gestione evento file: " . $e->getMessage(),
+            ['exception' => $e]
+        );
+    }
     }
 }
