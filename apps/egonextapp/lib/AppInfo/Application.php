@@ -36,8 +36,8 @@ class Application extends App implements IBootstrap {
         });
 
         // Eventi file: nuovi file e scritture
-        $context->registerEventListener(NodeCreatedEvent::class, FileEventsListener::class);
-        $context->registerEventListener(NodeWrittenEvent::class, FileEventsListener::class);
+        $context->registerEventListener(\OCP\Files\Events\Node\NodeCreatedEvent::class, \OCA\EgoNextApp\Listener\FileEventsListener::class);
+        $context->registerEventListener(\OCP\Files\Events\Node\NodeWrittenEvent::class, \OCA\EgoNextApp\Listener\FileEventsListener::class);
 
 
 

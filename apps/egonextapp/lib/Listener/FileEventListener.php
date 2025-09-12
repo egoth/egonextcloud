@@ -16,6 +16,7 @@ class FileEventsListener implements IEventListener {
     public function __construct(
         private CodaService $codaService,
         private IUserSession $userSession,
+        private ILogger $logger
     ) {}
 
     public function handle(Event $event): void {
