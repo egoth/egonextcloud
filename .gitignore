@@ -1,3 +1,4 @@
 # Non versionare dati runtime
 data/
 config/
+stubs/

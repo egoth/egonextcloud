@@ -3,59 +3,53 @@ declare(strict_types=1);
 
 namespace OCA\EgoNextApp\Listener;
 
+use OCA\EgoNextApp\Service\CodaService;
+use OCP\IUserSession;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Events\Node\NodeCreatedEvent;
 use OCP\Files\Events\Node\NodeWrittenEvent;
-use OCP\Files\FileInfo;
-use OCP\IUserSession;
-use OCP\ILogger;
-use OCA\EgoNextApp\Service\CodaService;
+use Psr\Log\LoggerInterface;
+use Throwable;
 
 class FileEventsListener implements IEventListener {
+
+    private CodaService $codaService;
+    private IUserSession $userSession;
+    private LoggerInterface $logger;
+
     public function __construct(
-        private CodaService $codaService,
-        private IUserSession $userSession,
-        private ILogger $logger
-    ) {}
+        CodaService $codaService,
+        IUserSession $userSession,
+        LoggerInterface $logger
+    ) {
+        $this->codaService = $codaService;
+        $this->userSession = $userSession;
+        $this->logger = $logger;
+    }
 
     public function handle(Event $event): void {
-        try{
+        try {
+            if ($event instanceof NodeCreatedEvent) {
+                $node = $event->getNode();
+                $user = $this->userSession->getUser()?->getUID() ?? 'anon';
 
-        if (!($event instanceof NodeCreatedEvent || $event instanceof NodeWrittenEvent)) {
-            return;
+                $this->logger->info("[egonextapp] File creato: {$node->getPath()} da {$user}");
+                $this->codaService->addEntry($node, $user, 'created');
+            }
+
+            if ($event instanceof NodeWrittenEvent) {
+                $node = $event->getNode();
+                $user = $this->userSession->getUser()?->getUID() ?? 'anon';
+
+                $this->logger->info("[egonextapp] File scritto/aggiornato: {$node->getPath()} da {$user}");
+                $this->codaService->addEntry($node, $user, 'written');
+            }
+        } catch (Throwable $e) {
+            // Non fermiamo mai l’evento, ma logghiamo l’errore
+            $this->logger->error("[egonextapp] Errore nella gestione evento: " . $e->getMessage(), [
+                'exception' => $e,
+            ]);
         }
-
-        $node = $event->getNode();
-        if ($node->getType() !== FileInfo::TYPE_FILE) {
-            return; // ignora cartelle
-        }
-
-        $user = $this->userSession->getUser();
-        $userId = $user ? $user->getUID() : '';
-
-        $path  = $node->getPath();
-        $size  = (int)$node->getSize();
-        $mime  = (string)$node->getMimetype();
-        $mtime = (int)$node->getMTime();
-
-  // Log che il file è in upload/scritto
-        $eventType = $event instanceof NodeCreatedEvent ? 'CREATED' : 'WRITTEN';
-        $this->logger->info("[egonextapp] File {$eventType}: user={$userId}, path={$path}, size={$size}, mime={$mime}, mtime={$mtime}");
-
-
-
-        // Inserisci una riga in coda
-        $this->codaService->enqueue($userId, $path, $size, $mime, $mtime);
-
-
-        $this->logger->debug("[egonextapp] File aggiunto in coda: {$path}");
-         } catch (\Throwable $e) {
-        // cattura qualunque eccezione o errore
-        $this->logger->error(
-            "[egonextapp] Errore durante la gestione evento file: " . $e->getMessage(),
-            ['exception' => $e]
-        );
-    }
     }
 }

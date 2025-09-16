@@ -7,71 +7,47 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Bootstrap\IBootContext;
-use OCP\EventDispatcher\IEventDispatcher; 
-use OCP\Util;
+use OCA\EgoNextApp\Service\CodaService;
+use OCA\EgoNextApp\Db\CodaMapper;
+use OCA\EgoNextApp\Listener\FileEventsListener;
+use Psr\Log\LoggerInterface;
 
 class Application extends App implements IBootstrap {
     public const APP_ID = 'egonextapp';
 
-    public function __construct() {
-        parent::__construct(self::APP_ID);
+    private LoggerInterface $logger;
+
+    public function __construct(array $urlParams = []) {
+        parent::__construct(self::APP_ID, $urlParams);
+        $this->logger = $this->getContainer()->get(LoggerInterface::class);
     }
 
     public function register(IRegistrationContext $context): void {
-        \OC::$server->getLogger()->info('[egonextapp] Application::register');
-        
-        
-        //per registrazione upload
+        $this->logger->info('[egonextapp] Application::register');
+
+        // Servizi DB
         $context->registerService(CodaMapper::class, function($c) {
-            return new CodaMapper($c->get(IDBConnection::class));
+            return new CodaMapper($c->get(\OCP\IDBConnection::class));
         });
         $context->registerService(CodaService::class, function($c) {
             return new CodaService($c->get(CodaMapper::class));
         });
+
+        // Listener eventi file
         $context->registerService(FileEventsListener::class, function($c) {
             return new FileEventsListener(
                 $c->get(CodaService::class),
-                $c->get(IUserSession::class),
+                $c->get(\OCP\IUserSession::class),
+                $c->get(LoggerInterface::class)
             );
         });
 
-        // Eventi file: nuovi file e scritture
-        $context->registerEventListener(\OCP\Files\Events\Node\NodeCreatedEvent::class, \OCA\EgoNextApp\Listener\FileEventsListener::class);
-        $context->registerEventListener(\OCP\Files\Events\Node\NodeWrittenEvent::class, \OCA\EgoNextApp\Listener\FileEventsListener::class);
-
-
-
+        $context->registerEventListener(\OCP\Files\Events\Node\NodeCreatedEvent::class, FileEventsListener::class);
+        $context->registerEventListener(\OCP\Files\Events\Node\NodeWrittenEvent::class, FileEventsListener::class);
     }
 
     public function boot(IBootContext $context): void {
-        \OC::$server->getLogger()->info('[egonextapp] Application::boot');
-
-        // carica lo script JS
-        Util::addScript(self::APP_ID, 'main');
-
-        $dispatcher = $context->getServerContainer()->get(IEventDispatcher::class);
-
-        // Evento PRIMA dell’upload
-        $dispatcher->addListener(BeforeFileScannedEvent::class, function(BeforeFileScannedEvent $event) {
-            $file = $event->getFile();
-            \OC::$server->getLogger()->info("[egonextapp] Inizio upload file: " . $file->getPath());
-        });
-
-        // Evento DOPO creazione nuovo file
-        $dispatcher->addListener(FileCreatedEvent::class, function(FileCreatedEvent $event) {
-            $file = $event->getFile();
-            \OC::$server->getLogger()->info("[egonextapp] File creato: " . $file->getPath() . " (" . $file->getSize() . " bytes)");
-        });
-
-        // Evento DOPO scrittura (anche overwrite)
-        $dispatcher->addListener(FileWrittenEvent::class, function(FileWrittenEvent $event) {
-            $file = $event->getFile();
-            \OC::$server->getLogger()->info("[egonextapp] File scritto/aggiornato: " . $file->getPath());
-        });
-
-
-
-
-
+        $this->logger->info('[egonextapp] Application::boot');
+        \OCP\Util::addScript(self::APP_ID, 'main');
     }
 }
