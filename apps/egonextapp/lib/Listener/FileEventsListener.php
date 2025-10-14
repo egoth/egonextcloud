@@ -35,7 +35,7 @@ class FileEventsListener implements IEventListener {
                 $user = $this->userSession->getUser()?->getUID() ?? 'anon';
 
                 $this->logger->info("[egonextapp] File creato: {$node->getPath()} da {$user}");
-                $this->codaService->addEntry($node, $user, 'created');
+                $this->codaService->enqueue($user,$node->getPath(),$node->getSize(),$node->getMimetype(),$node->getMTime());
             }
 
             if ($event instanceof NodeWrittenEvent) {
@@ -43,7 +43,8 @@ class FileEventsListener implements IEventListener {
                 $user = $this->userSession->getUser()?->getUID() ?? 'anon';
 
                 $this->logger->info("[egonextapp] File scritto/aggiornato: {$node->getPath()} da {$user}");
-                $this->codaService->addEntry($node, $user, 'written');
+                
+                $this->codaService->enqueue($user,$node->getPath(),$node->getSize(),$node->getMimetype(),$node->getMTime());
             }
         } catch (Throwable $e) {
             // Non fermiamo mai l’evento, ma logghiamo l’errore
