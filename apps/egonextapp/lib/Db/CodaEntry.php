@@ -7,7 +7,7 @@ use OCP\AppFramework\Db\Entity;
 
 class CodaEntry extends Entity {
     /** @var int|null */
-    protected $id;
+    public $id;
     /** @var string */
     protected $userId;
     /** @var string */
