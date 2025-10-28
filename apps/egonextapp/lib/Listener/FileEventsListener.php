@@ -36,9 +36,7 @@ class FileEventsListener implements IEventListener {
 
                 $this->logger->info("[egonextapp] File creato: {$node->getPath()} da {$user}");
                 $this->codaService->enqueue($user,$node->getPath(),$node->getSize(),$node->getMimetype(),$node->getMTime());
-            }
-
-            if ($event instanceof NodeWrittenEvent) {
+            } else if ($event instanceof NodeWrittenEvent) {
                 $node = $event->getNode();
                 $user = $this->userSession->getUser()?->getUID() ?? 'anon';
 
