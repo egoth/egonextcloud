@@ -9,6 +9,6 @@ use OCP\IDBConnection;
 class CodaMapper extends QBMapper {
     public function __construct(IDBConnection $db) {
         // nome tabella SENZA prefisso (Nextcloud aggiunge il prefisso, es. "oc_")
-        parent::__construct($db, 'egonextapp_coda', CodaEntry::class);
+        parent::__construct($db, 'coda_nuovi_files', CodaEntry::class);
     }
 }
