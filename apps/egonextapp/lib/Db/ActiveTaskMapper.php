@@ -61,4 +61,27 @@ class ActiveTaskMapper extends QBMapper {
            ->andWhere($qb->expr()->eq('taskname', $qb->createNamedParameter($taskname)))
            ->executeStatement();
     }
+
+    /**
+     * Restituisce i path presenti in coda_nuovi_files per uno specifico mimetype
+     * che non hanno ancora una riga corrispondente in active_tasks per il taskname dato.
+     */
+    public function findPathsForMappingNotEnqueued(string $taskname, string $mimetype, int $limit = 500): array {
+        $qb = $this->db->getQueryBuilder();
+        $activeTable = $this->getTableName();
+
+        $qb->selectDistinct('c.path')
+           ->from('coda_nuovi_files', 'c')
+           ->leftJoin(
+               'c',
+               $activeTable,
+               't',
+               't.path = c.path AND t.taskname = ' . $qb->createNamedParameter($taskname)
+           )
+           ->where($qb->expr()->eq('c.mimetype', $qb->createNamedParameter($mimetype)))
+           ->andWhere($qb->expr()->isNull('t.id'))
+           ->setMaxResults($limit);
+
+        return $qb->executeQuery()->fetchFirstColumn();
+    }
 }

@@ -19,7 +19,7 @@ class TaskExecutorMap extends Entity {
     protected $mimetype;
     protected $executorClass;
 
-    public function setTaskname(string $v): void     { $this->setter('taskname', $v); }
-    public function setMimetype(string $v): void     { $this->setter('mimetype', $v); }
-    public function setExecutorClass(string $v): void{ $this->setter('executorClass', $v); }
+    public function setTaskname(string $v): void     { $this->setter('taskname', [$v]); }
+    public function setMimetype(string $v): void     { $this->setter('mimetype', [$v]); }
+    public function setExecutorClass(string $v): void{ $this->setter('executorClass', [$v]); }
 }
