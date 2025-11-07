@@ -8,6 +8,7 @@ use OCP\BackgroundJob\Job;
 use Psr\Log\LoggerInterface;
 
 abstract class BaseExecutor extends Job {
+    public const TIMEOUT_SECONDS = 60;
     public function __construct(
         protected ActiveTaskMapper $active,
         protected LoggerInterface $logger
@@ -44,4 +45,12 @@ abstract class BaseExecutor extends Job {
     }
 
     abstract protected function doWork(string $path, string $taskname): void;
+
+    /**
+     * Esegue immediatamente l'executor nello stesso processo, bypassando la coda dei Job.
+     * Utile per orchestrazioni sincrone e test.
+     */
+    public function runNow(array $argument): void {
+        $this->run($argument);
+    }
 }

@@ -12,12 +12,11 @@ class TaskExecutorMapMapper extends QBMapper {
         parent::__construct($db, 'mappa_executor_task', TaskExecutorMap::class);
     }
 
-    public function findExecutor(string $taskname, string $mimetype): ?string {
+    public function findExecutor(string $taskname): ?string {
         $qb = $this->db->getQueryBuilder();
         $qb->select('executor_class')
            ->from($this->getTableName())
            ->where($qb->expr()->eq('taskname', $qb->createNamedParameter($taskname)))
-           ->andWhere($qb->expr()->eq('mimetype', $qb->createNamedParameter($mimetype)))
            ->setMaxResults(1);
         $row = $qb->executeQuery()->fetchAll();
         return $row['executor_class'] ?? null;

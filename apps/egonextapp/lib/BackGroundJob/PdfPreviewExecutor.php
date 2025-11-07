@@ -12,7 +12,7 @@ class PdfPreviewExecutor extends BaseExecutor {
     }
 
     protected function doWork(string $path, string $taskname): void {
-        // TODO: logica di elaborazione PDF (anteprime, ecc.)
+        // TODO: logica di elaborazione Heic (anteprime, ecc.)
         // simulazione:
         usleep(250000); // 250ms
         $this->logger->debug("[egonextapp] PdfPreviewExecutor processed $path");

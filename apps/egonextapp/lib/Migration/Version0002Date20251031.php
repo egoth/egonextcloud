@@ -104,6 +104,44 @@ class Version0002Date20251031 extends SimpleMigrationStep {
         return $schema;
     }
 
+    /** Inserisce record di mapping iniziali in mappa_executor_task */
+    public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
+        /** @var IDBConnection $conn */
+        $conn = $this->connection;
+
+        $seed = [
+            [
+                'taskname' => 'task_heic',
+                'mimetype' => 'image/heif',
+                // FQCN per autoload degli executor
+                'executor_class' => 'OCA\\EgoNextApp\\BackgroundJob\\HeicPreviewExecutor',
+            ],
+            [
+                'taskname' => 'task_pdf',
+                'mimetype' => 'application/pdf',
+                'executor_class' => 'OCA\\EgoNextApp\\BackgroundJob\\PdfPreviewExecutor',
+            ],
+        ];
+
+        foreach ($seed as $row) {
+            try {
+                $exists = (int)$conn->executeQuery(
+                    'SELECT COUNT(1) FROM `*PREFIX*mappa_executor_task` WHERE `taskname` = ? AND `mimetype` = ? LIMIT 1',
+                    [$row['taskname'], $row['mimetype']]
+                )->fetchOne();
+
+                if ($exists === 0) {
+                    $conn->executeStatement(
+                        'INSERT INTO `*PREFIX*mappa_executor_task` (`taskname`, `mimetype`, `executor_class`) VALUES (?, ?, ?)',
+                        [$row['taskname'], $row['mimetype'], $row['executor_class']]
+                    );
+                }
+            } catch (\Throwable $e) {
+                $this->logger->warning('[egonextapp] Seed mappa_executor_task fallito: '.$e->getMessage(), $row);
+            }
+        }
+    }
+
     /** Helper: rinomina tabella se esiste, con SQL corretto per il DB in uso */
     private function renameIfExists(IDBConnection $conn, string $prefix, string $from, string $to): void {
         return;

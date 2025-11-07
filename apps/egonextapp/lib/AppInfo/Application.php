@@ -70,6 +70,17 @@ class Application extends App implements IBootstrap
                 $c->get(\Psr\Log\LoggerInterface::class),
             )
         );
+        $context->registerService(\OCA\EgoNextApp\Service\ActiveTasksExecutor::class, function ($c) {
+            return new \OCA\EgoNextApp\Service\ActiveTasksExecutor(
+                $c->get(\OCA\EgoNextApp\Db\ActiveTaskMapper::class),
+                $c->get(\OCA\EgoNextApp\Db\TaskExecutorMapMapper::class),
+                $c->get(\OCA\EgoNextApp\Db\CodaMapper::class),
+                $c->get(\Psr\Log\LoggerInterface::class)
+            );
+        });
+        if (method_exists($context, 'registerCommand')) {
+            $context->registerCommand(\OCA\EgoNextApp\Command\RunActiveTasks::class);
+        }
     }
 
     public function boot(IBootContext $context): void

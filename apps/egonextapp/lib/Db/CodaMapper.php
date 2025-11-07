@@ -28,4 +28,20 @@ class CodaMapper extends QBMapper {
 
         return $qb->executeQuery()->fetchAll();
     }
+
+    /**
+     * Restituisce l'ultimo mimetype noto per un dato path
+     * presente in coda_nuovi_files, oppure null se assente.
+     */
+    public function findMimetypeByPath(string $path): ?string {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('mimetype')
+           ->from($this->getTableName())
+           ->where($qb->expr()->eq('path', $qb->createNamedParameter($path)))
+           ->orderBy('created_at', 'DESC')
+           ->setMaxResults(1);
+
+        $val = $qb->executeQuery()->fetchOne();
+        return ($val === false) ? null : (string)$val;
+    }
 }

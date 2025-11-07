@@ -9,7 +9,7 @@ use OCP\IDBConnection;
 /** @extends QBMapper<ActiveTask> */
 class ActiveTaskMapper extends QBMapper {
     public function __construct(IDBConnection $db) {
-        parent::__construct($db, 'egonextapp_active_tasks', ActiveTask::class);
+        parent::__construct($db, 'tasks_attivi', ActiveTask::class);
     }
 
     /** Ritorna (path, taskname) non started & non done */
@@ -20,7 +20,7 @@ class ActiveTaskMapper extends QBMapper {
            ->where($qb->expr()->eq('started', $qb->createNamedParameter(0)))
            ->andWhere($qb->expr()->eq('done', $qb->createNamedParameter(0)))
            ->setMaxResults($limit);
-        return $qb->executeQuery()->fetchAllAssociative();
+        return $qb->executeQuery()->fetchAll();
     }
 
     public function upsertIfMissing(string $path, string $taskname): void {
@@ -60,28 +60,5 @@ class ActiveTaskMapper extends QBMapper {
            ->where($qb->expr()->eq('path', $qb->createNamedParameter($path)))
            ->andWhere($qb->expr()->eq('taskname', $qb->createNamedParameter($taskname)))
            ->executeStatement();
-    }
-
-    /**
-     * Restituisce i path presenti in coda_nuovi_files per uno specifico mimetype
-     * che non hanno ancora una riga corrispondente in active_tasks per il taskname dato.
-     */
-    public function findPathsForMappingNotEnqueued(string $taskname, string $mimetype, int $limit = 500): array {
-        $qb = $this->db->getQueryBuilder();
-        $activeTable = $this->getTableName();
-
-        $qb->selectDistinct('c.path')
-           ->from('coda_nuovi_files', 'c')
-           ->leftJoin(
-               'c',
-               $activeTable,
-               't',
-               't.path = c.path AND t.taskname = ' . $qb->createNamedParameter($taskname)
-           )
-           ->where($qb->expr()->eq('c.mimetype', $qb->createNamedParameter($mimetype)))
-           ->andWhere($qb->expr()->isNull('t.id'))
-           ->setMaxResults($limit);
-
-        return $qb->executeQuery()->fetchFirstColumn();
     }
 }
