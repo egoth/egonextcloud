@@ -13,3 +13,5 @@ mariadb -h 127.0.0.1 -u\"$DBUSER\" -p\"$DBPASS\" \"$DBNAME\" \
       ORDER BY id DESC
       LIMIT 10;\"
 "
+
+docker compose exec -T db mariadb -u $DBUSER -p$DBPASS -D $DBNAME -e 'SELECT taskname,mimetype,executor_class FROM oc_mappa_executor_task; SELECT path,taskname,started,done FROM oc_tasks_attivi LIMIT 50; SELECT path,mimetype,created_at FROM oc_coda_nuovi_files LIMIT 50;'
