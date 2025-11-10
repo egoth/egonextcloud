@@ -24,6 +24,7 @@ class RunActiveTasks extends Command
     protected function configure(): void
     {
         $this
+            ->setName('egonextapp:run-active-tasks') // esplicito per compatibilità con Symfony usato da Nextcloud
             ->setDescription('Esegue i task attivi non avviati (started=0, done=0)')
             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Max task da processare', '50');
     }
@@ -46,4 +47,3 @@ class RunActiveTasks extends Command
         }
     }
 }
-
