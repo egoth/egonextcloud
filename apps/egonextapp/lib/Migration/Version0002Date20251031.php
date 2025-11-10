@@ -64,7 +64,7 @@ class Version0002Date20251031 extends SimpleMigrationStep {
             $t = $schema->createTable('coda_nuovi_files');
             $t->addColumn('id', 'bigint', ['autoincrement' => true, 'notnull' => true]);
             $t->addColumn('user_id', 'string', ['length' => 64, 'notnull' => true]);
-            $t->addColumn('path', 'string', ['length' => 4096, 'notnull' => true]);
+            $t->addColumn('path', 'string', ['length' => 4000, 'notnull' => true]);
             $t->addColumn('size', 'bigint', ['notnull' => true, 'default' => 0]);
             $t->addColumn('mimetype', 'string', ['length' => 255, 'notnull' => true, 'default' => '']);
             $t->addColumn('mtime', 'bigint', ['notnull' => true]);
