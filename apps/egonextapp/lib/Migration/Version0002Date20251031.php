@@ -79,7 +79,7 @@ class Version0002Date20251031 extends SimpleMigrationStep {
         if (!$schema->hasTable('tasks_attivi')) {
             $t = $schema->createTable('tasks_attivi');
             $t->addColumn('id', 'bigint', ['autoincrement' => true, 'notnull' => true]);
-            $t->addColumn('path', 'string', ['length' => 4096, 'notnull' => true]);
+            $t->addColumn('path', 'string', ['length' => 4000, 'notnull' => true]);
             $t->addColumn('taskname', 'string', ['length' => 64, 'notnull' => true]);
             $t->addColumn('started', 'smallint', ['notnull' => true, 'default' => 0]);
             $t->addColumn('done', 'smallint', ['notnull' => true, 'default' => 0]);
