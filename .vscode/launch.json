@@ -11,6 +11,7 @@
             "port": 9003,
             "log": true,
             "pathMappings": {
+                "/var/www/html/apps/egonextapp": "C:\\\\Users\\\\P053430\\\\OneDrive - RAI Radio Televisione Italiana Spa\\\\Documenti 1\\\\Sviluppo\\\\EgoNextcloud\\\\apps\\\\egonextapp",
                 "/var/www/html/custom_apps/egonextapp": "C:\\\\Users\\\\P053430\\\\OneDrive - RAI Radio Televisione Italiana Spa\\\\Documenti 1\\\\Sviluppo\\\\EgoNextcloud\\\\apps\\\\egonextapp",
                 "/var/www/html/lib": "C:\\\\Users\\\\P053430\\\\OneDrive - RAI Radio Televisione Italiana Spa\\\\Documenti 1\\\\Sviluppo\\\\EgoNextcloud\\\\stubs"
             }
