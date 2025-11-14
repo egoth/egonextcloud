@@ -1,4 +1,4 @@
-﻿{
+{
     // Usare IntelliSense per informazioni sui possibili attributi.
     // Al passaggio del mouse vengono visualizzate le descrizioni degli attributi esistenti.
     // Per altre informazioni, visitare: https://go.microsoft.com/fwlink/?linkid=830387
@@ -11,7 +11,6 @@
             "port": 9003,
             "log": true,
             "pathMappings": {
-                "/var/www/html/apps/egonextapp": "C:\\\\Users\\\\P053430\\\\OneDrive - RAI Radio Televisione Italiana Spa\\\\Documenti 1\\\\Sviluppo\\\\EgoNextcloud\\\\apps\\\\egonextapp",
                 "/var/www/html/custom_apps/egonextapp": "C:\\\\Users\\\\P053430\\\\OneDrive - RAI Radio Televisione Italiana Spa\\\\Documenti 1\\\\Sviluppo\\\\EgoNextcloud\\\\apps\\\\egonextapp",
                 "/var/www/html/lib": "C:\\\\Users\\\\P053430\\\\OneDrive - RAI Radio Televisione Italiana Spa\\\\Documenti 1\\\\Sviluppo\\\\EgoNextcloud\\\\stubs"
             }
