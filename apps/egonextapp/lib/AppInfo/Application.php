@@ -8,6 +8,7 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Bootstrap\IBootContext;
+use OCA\EgoNextApp\Command\RunActiveTasks;
 use OCA\EgoNextApp\Service\CodaService;
 use OCA\EgoNextApp\Db\CodaMapper;
 use OCA\EgoNextApp\Listener\FileEventsListener;
@@ -78,9 +79,12 @@ class Application extends App implements IBootstrap
                 $c->get(\Psr\Log\LoggerInterface::class)
             );
         });
-        if (method_exists($context, 'registerCommand')) {
-            $context->registerCommand(\OCA\EgoNextApp\Command\RunActiveTasks::class);
-        }
+        $context->registerService(RunActiveTasks::class, function ($c) {
+            return new RunActiveTasks(
+                $c->get(\OCA\EgoNextApp\Service\ActiveTasksExecutor::class),
+                $c->get(\Psr\Log\LoggerInterface::class)
+            );
+        });
     }
 
     public function boot(IBootContext $context): void
