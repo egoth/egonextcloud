@@ -11,7 +11,8 @@
             "port": 9003,
             "log": true,
             "pathMappings": {
-                "/var/www/html": "${workspaceFolder}"
+                "/var/www/html/custom_apps/egonextapp": "${workspaceFolder}/apps/egonextapp",
+                "/var/www/html/lib": "${workspaceFolder}/stubs"
             }
         },
         {
