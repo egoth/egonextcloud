@@ -23,10 +23,23 @@ class RunActiveTasks extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setName('egonextapp:run-active-tasks') // esplicito per compatibilità con Symfony usato da Nextcloud
-            ->setDescription('Esegue i task attivi non avviati (started=0, done=0)')
-            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Max task da processare', '50');
+        try {
+            $this->logger->info('[egonextapp] RunActiveTasks::configure start');
+
+            $this->setName('egonextapp:run-active-tasks'); // esplicito per compatibilità con Symfony usato da Nextcloud
+            $this->logger->info('[egonextapp] RunActiveTasks::configure setName');
+
+            $this->setDescription('Esegue i task attivi non avviati (started=0, done=0)');
+            $this->logger->info('[egonextapp] RunActiveTasks::configure setDescription');
+
+            $this->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Max task da processare', '50');
+            $this->logger->info('[egonextapp] RunActiveTasks::configure addOption');
+        } catch (\Throwable $e) {
+            $this->logger->error('[egonextapp] RunActiveTasks::configure error: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+            throw $e;
+        }
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
