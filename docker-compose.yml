@@ -40,6 +40,7 @@ services:
       - /srv/nextcloud/themes:/var/www/html/themes
       # La tua app custom dal repo (giÃ  lo usavi)
       - ./apps:/var/www/html/custom_apps
+      - /srv/nextcloud/html:/var/www/html
     depends_on: [db, redis]
     restart: unless-stopped
 
