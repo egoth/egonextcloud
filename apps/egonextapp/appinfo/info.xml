@@ -18,7 +18,9 @@
   <scripts>
     <script>js/main.js</script>
   </scripts>
-
+  <commands>
+		<command>OCA\EgoNextApp\Command\RunActiveTasks</command>
+	</commands>
   <bootstrap>OCA\EgoNextApp\AppInfo\Application</bootstrap>
 
 </info>

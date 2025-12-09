@@ -1,4 +1,39 @@
+# Ignora symlink HTML della Nextcloud core
+/html/
+html
+
 # Non versionare dati runtime
 data/
 config/
 stubs/
+
+# Ignora tutte le app tranne la tua
+/apps/calendar/
+/apps/contacts/
+/apps/mail/
+/apps/notes/
+/apps/richdocuments/
+/apps/tables/
+
+
+# Ignora artifact JS/PHP comune
+**/node_modules/
+**/vendor/
+**/dist/
+**/build/
+
+# Ignora files di Nextcloud copiati da Mac
+/Da Mac/nextcloudserver/
+/Da Mac/nextcloud-heic/
+
+# Ignora file temporanei
+*.log
+*.tmp
+*.bak
+
+# Ignora script di sviluppo locale
+#docker-util-script/per_sviluppo/
+
+# Ignora editor e OS
+.DS_Store
+.vscode/
