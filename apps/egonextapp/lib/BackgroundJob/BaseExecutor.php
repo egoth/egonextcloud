@@ -4,16 +4,18 @@ declare(strict_types=1);
 namespace OCA\EgoNextApp\BackgroundJob;
 
 use OCA\EgoNextApp\Db\ActiveTaskMapper;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\Job;
 use Psr\Log\LoggerInterface;
 
 abstract class BaseExecutor extends Job {
     public const TIMEOUT_SECONDS = 60;
     public function __construct(
+        ITimeFactory $timeFactory,
         protected ActiveTaskMapper $active,
         protected LoggerInterface $logger
     ) {
-        parent::__construct();
+        parent::__construct($timeFactory);
     }
 
     /**

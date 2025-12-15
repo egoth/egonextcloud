@@ -61,4 +61,11 @@ class ActiveTaskMapper extends QBMapper {
            ->andWhere($qb->expr()->eq('taskname', $qb->createNamedParameter($taskname)))
            ->executeStatement();
     }
+
+	public function resetConnection(): void {
+		if (\method_exists($this->db, 'close')) {
+			$this->db->close();
+		}
+		$this->db->connect();
+	}
 }

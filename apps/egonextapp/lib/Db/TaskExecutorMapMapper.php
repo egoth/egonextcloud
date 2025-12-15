@@ -19,16 +19,19 @@ class TaskExecutorMapMapper extends QBMapper {
            ->where($qb->expr()->eq('taskname', $qb->createNamedParameter($taskname)))
            ->setMaxResults(1);
         $row = $qb->executeQuery()->fetchAll();
-        return $row['executor_class'] ?? null;
+        $e=$row[0]['executor_class'];
+        $r=$e ?? null;
+        return $r;
     }
 
     public function findTasknamesByMimetype(string $mimetype): array {
         $qb = $this->db->getQueryBuilder();
-        $qb->select('executor_class')
+        $qb->select(['taskname'])
            ->from($this->getTableName())
-           ->where($qb->expr()->eq('taskname', $qb->createNamedParameter($mimetype)))
+           ->where($qb->expr()->eq('mimetype', $qb->createNamedParameter($mimetype)))
            ->setMaxResults(100);
         $row = $qb->executeQuery()->fetchAll();
+        $sql=$qb->getSQL();
         return $row ?? null;
     }
 

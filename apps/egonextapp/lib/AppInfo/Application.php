@@ -8,7 +8,9 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCA\EgoNextApp\Command\RunActiveTasks;
+use OCA\EgoNextApp\Command\ShowTables;
 use OCA\EgoNextApp\Service\CodaService;
 use OCA\EgoNextApp\Db\CodaMapper;
 use OCA\EgoNextApp\Listener\FileEventsListener;
@@ -76,12 +78,20 @@ class Application extends App implements IBootstrap
                 $c->get(\OCA\EgoNextApp\Db\ActiveTaskMapper::class),
                 $c->get(\OCA\EgoNextApp\Db\TaskExecutorMapMapper::class),
                 $c->get(\OCA\EgoNextApp\Db\CodaMapper::class),
-                $c->get(\Psr\Log\LoggerInterface::class)
+                $c->get(\Psr\Log\LoggerInterface::class),
+                $c->get(ITimeFactory::class),
             );
         });
         $context->registerService(RunActiveTasks::class, function ($c) {
             return new RunActiveTasks(
                 $c->get(\OCA\EgoNextApp\Service\ActiveTasksExecutor::class),
+                $c->get(\Psr\Log\LoggerInterface::class),
+                $c->get(\OCA\EgoNextApp\Service\TaskOrchestrator::class)
+            );
+        });
+        $context->registerService(ShowTables::class, function ($c) {
+            return new ShowTables(
+                $c->get(\OCP\IDBConnection::class),
                 $c->get(\Psr\Log\LoggerInterface::class)
             );
         });

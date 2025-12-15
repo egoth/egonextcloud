@@ -1,0 +1,32 @@
+.
+├── AppInfo
+│   └── Application.php
+├── BackGroundJob
+│   ├── BaseExecutor.php
+│   ├── HeicPreviewExecutor.php
+│   └── PdfPreviewExecutor.php
+├── Command
+│   ├── RunActiveTasks.php
+│   └── ShowTables.php
+├── Db
+│   ├── ActiveTaskMapper.php
+│   ├── ActiveTask.php
+│   ├── CodaEntry.php
+│   ├── CodaMapper.php
+│   ├── TaskExecutorMapMapper.php
+│   └── TaskExecutorMap.php
+├── Listener
+│   ├── FileEventsListener.php
+│   └── FilesLoadAdditionalScriptsListener.php
+├── Migration
+│   ├── Version0001Date20250909.php
+│   └── Version0002Date20251031.php
+└── Service
+    ├── ActiveTasksExecutor.php
+    ├── CodaService.php
+    └── TaskOrchestrator.php
+
+    RunActiveTasks lancia    ActiveTasksExecutor che spazzola la coda di tasks_attivi
+
+    CodaMapper è richiamato da TaskOrchestrator e riempie la coda di tasks_attivi se non trova path della coda_nuovi_files
+

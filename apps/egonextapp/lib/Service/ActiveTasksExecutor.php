@@ -7,6 +7,7 @@ use OCA\EgoNextApp\Db\ActiveTaskMapper;
 use OCA\EgoNextApp\Db\TaskExecutorMapMapper;
 use OCA\EgoNextApp\Db\CodaMapper;
 use OCA\EgoNextApp\BackgroundJob\BaseExecutor;
+use OCP\AppFramework\Utility\ITimeFactory;
 use Psr\Log\LoggerInterface;
 
 class ActiveTasksExecutor
@@ -16,6 +17,7 @@ class ActiveTasksExecutor
         private TaskExecutorMapMapper $map,
         private CodaMapper $coda,
         private LoggerInterface $logger,
+        private ITimeFactory $timeFactory,
     ) {}
 
     /**
@@ -36,7 +38,7 @@ class ActiveTasksExecutor
 
             $executorClass = $this->map->findExecutor($taskname);
             if (!$executorClass || !\class_exists($executorClass)) {
-                $this->logger->warning("[egonextapp] Executor non trovato per $taskname su $path");
+                $this->logger->warning("[egonextapp] Executor $executorClass non trovato per $taskname su $path");
                 continue;
             }
 
@@ -53,8 +55,8 @@ class ActiveTasksExecutor
     private function instantiateExecutor(string $class): ?BaseExecutor
     {
         try {
-            // I figli di BaseExecutor accettano (ActiveTaskMapper, LoggerInterface)
-            return new $class($this->active, $this->logger);
+            // I figli di BaseExecutor accettano (ITimeFactory, ActiveTaskMapper, LoggerInterface)
+            return new $class($this->timeFactory, $this->active, $this->logger);
         } catch (\Throwable $e) {
             $this->logger->error('[egonextapp] Errore istanziando executor '.$class.': '.$e->getMessage());
             return null;
@@ -74,10 +76,12 @@ class ActiveTasksExecutor
                 return;
             }
             if ($pid === 0) {
+                $this->resetDbConnection();
                 // child
                 $executor->runNow($argument);
                 exit(0);
             }
+            $this->resetDbConnection();
 
             $start = \time();
             while (true) {
@@ -129,5 +133,13 @@ class ActiveTasksExecutor
         }
         return BaseExecutor::TIMEOUT_SECONDS;
     }
-}
 
+    private function resetDbConnection(): void
+    {
+        try {
+            $this->active->resetConnection();
+        } catch (\Throwable $e) {
+            $this->logger->error('[egonextapp] Errore reset connessione DB: '.$e->getMessage());
+        }
+    }
+}

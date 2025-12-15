@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace OCA\EgoNextApp\BackgroundJob;
 
 use OCA\EgoNextApp\Db\ActiveTaskMapper;
+use OCP\AppFramework\Utility\ITimeFactory;
 use Psr\Log\LoggerInterface;
 
 class HeicPreviewExecutor extends BaseExecutor {
-    public function __construct(ActiveTaskMapper $active, LoggerInterface $logger) {
-        parent::__construct($active, $logger);
+    public function __construct(ITimeFactory $timeFactory, ActiveTaskMapper $active, LoggerInterface $logger) {
+        parent::__construct($timeFactory, $active, $logger);
     }
 
     protected function doWork(string $path, string $taskname): void {

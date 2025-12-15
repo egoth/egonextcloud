@@ -18,9 +18,9 @@ class CodaMapper extends QBMapper {
      */
     public function findPathsAndMimetypeNotInActiveTasks(int $limit = 500): array {
         $qb = $this->db->getQueryBuilder();
-        $activeTable = 'egonextapp_active_tasks';
+        $activeTable = 'tasks_attivi';
 
-        $qb->selectDistinct('c.path', 'c.mimetype')
+        $qb->selectDistinct(['c.path', 'c.mimetype'])
            ->from($this->getTableName(), 'c')
            ->leftJoin('c', $activeTable, 't', 't.path = c.path')
            ->where($qb->expr()->isNull('t.id'))

@@ -36,7 +36,7 @@ class TaskOrchestrator {
 
                 $tasknames = $this->map->findTasknamesByMimetype($mimetype);
                 foreach ($tasknames as $taskname) {
-                    $this->active->upsertIfMissing($path, $taskname);
+                    $this->active->upsertIfMissing($path, $taskname['taskname'] ?? '');
                     $this->logger->info("[egonextapp] tasks_attivi + ($taskname, $path) [mimetype=$mimetype]");
                 }
             }

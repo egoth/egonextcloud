@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace OCA\EgoNextApp\Command;
 
 use OCA\EgoNextApp\Service\ActiveTasksExecutor;
+use OCA\EgoNextApp\Service\TaskOrchestrator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,6 +18,7 @@ class RunActiveTasks extends Command
     public function __construct(
         private ActiveTasksExecutor $runner,
         private LoggerInterface $logger,
+        private TaskOrchestrator $orchestrator,
     ) {
         parent::__construct();
     }
@@ -49,6 +51,7 @@ class RunActiveTasks extends Command
         $output->writeln("[egonextapp] Avvio runPending(limit=$limit)");
 
         try {
+            $this->orchestrator->dispatchPending([], $limit);
             $this->runner->runPending($limit);
             $output->writeln('[egonextapp] Completato.');
             return self::SUCCESS;
