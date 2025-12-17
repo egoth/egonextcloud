@@ -44,4 +44,29 @@ class CodaMapper extends QBMapper {
         $val = $qb->executeQuery()->fetchOne();
         return ($val === false) ? null : (string)$val;
     }
+
+    /**
+     * Restituisce i record con created_at <= $timestamp.
+     *
+     * @return array<int, array{id:int, path:string, created_at:int}>
+     */
+    public function findOlderThan(int $timestamp, int $limit = 1000): array {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('id', 'path', 'created_at')
+           ->from($this->getTableName())
+           ->where($qb->expr()->lte('created_at', $qb->createNamedParameter($timestamp, \PDO::PARAM_INT)))
+           ->orderBy('created_at', 'ASC')
+           ->setMaxResults($limit);
+
+        $result = $qb->executeQuery();
+        return $result->fetchAll();
+    }
+
+    public function deleteById(int $id): int {
+        $qb = $this->db->getQueryBuilder();
+        $qb->delete($this->getTableName())
+           ->where($qb->expr()->eq('id', $qb->createNamedParameter($id, \PDO::PARAM_INT)));
+
+        return $qb->executeStatement();
+    }
 }

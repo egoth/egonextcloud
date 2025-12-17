@@ -9,6 +9,7 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCA\EgoNextApp\Command\CleanupQueue;
 use OCA\EgoNextApp\Command\RunActiveTasks;
 use OCA\EgoNextApp\Command\ShowTables;
 use OCA\EgoNextApp\Service\CodaService;
@@ -88,6 +89,13 @@ class Application extends App implements IBootstrap
                 $c->get(\OCA\EgoNextApp\Service\ActiveTasksExecutor::class),
                 $c->get(\Psr\Log\LoggerInterface::class),
                 $c->get(\OCA\EgoNextApp\Service\TaskOrchestrator::class)
+            );
+        });
+        $context->registerService(CleanupQueue::class, function ($c) {
+            return new CleanupQueue(
+                $c->get(\OCA\EgoNextApp\Db\CodaMapper::class),
+                $c->get(\OCA\EgoNextApp\Db\ActiveTaskMapper::class),
+                $c->get(\Psr\Log\LoggerInterface::class)
             );
         });
         $context->registerService(ShowTables::class, function ($c) {

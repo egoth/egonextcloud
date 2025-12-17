@@ -62,6 +62,15 @@ class ActiveTaskMapper extends QBMapper {
            ->executeStatement();
     }
 
+    /** Cancella tutti i task attivi relativi a uno specifico path. */
+    public function deleteByPath(string $path): int {
+        $qb = $this->db->getQueryBuilder();
+        $qb->delete($this->getTableName())
+           ->where($qb->expr()->eq('path', $qb->createNamedParameter($path)));
+
+        return $qb->executeStatement();
+    }
+
 	public function resetConnection(): void {
 		if (\method_exists($this->db, 'close')) {
 			$this->db->close();

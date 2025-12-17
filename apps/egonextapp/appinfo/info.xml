@@ -21,6 +21,7 @@
   <commands>
 		<command>OCA\EgoNextApp\Command\RunActiveTasks</command>
     <command>OCA\EgoNextApp\Command\ShowTables</command>
+    <command>OCA\EgoNextApp\Command\CleanupQueue</command>
 	</commands>
   <bootstrap>OCA\EgoNextApp\AppInfo\Application</bootstrap>
 
