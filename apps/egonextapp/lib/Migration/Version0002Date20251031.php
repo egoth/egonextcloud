@@ -111,8 +111,14 @@ class Version0002Date20251031 extends SimpleMigrationStep {
 
         $seed = [
             [
-                'taskname' => 'task_heic',
+                'taskname' => 'task_heif',
                 'mimetype' => 'image/heif',
+                // FQCN per autoload degli executor
+                'executor_class' => 'OCA\\EgoNextApp\\BackgroundJob\\HeifPreviewExecutor',
+            ],
+            [
+                'taskname' => 'task_heic',
+                'mimetype' => 'image/heic',
                 // FQCN per autoload degli executor
                 'executor_class' => 'OCA\\EgoNextApp\\BackgroundJob\\HeicPreviewExecutor',
             ],

@@ -14,6 +14,7 @@ use OCA\EgoNextApp\Command\ShowTables;
 use OCA\EgoNextApp\Service\CodaService;
 use OCA\EgoNextApp\Db\CodaMapper;
 use OCA\EgoNextApp\Listener\FileEventsListener;
+use OCA\EgoNextApp\Preview\HeicPreviewProvider;
 use Psr\Log\LoggerInterface;
 
 class Application extends App implements IBootstrap
@@ -95,6 +96,14 @@ class Application extends App implements IBootstrap
                 $c->get(\Psr\Log\LoggerInterface::class)
             );
         });
+
+        $context->registerService(HeicPreviewProvider::class, function ($c) {
+            return new HeicPreviewProvider(
+                $c->get(\OCP\IConfig::class),
+                $c->get(LoggerInterface::class)
+            );
+        });
+        $context->registerPreviewProvider(HeicPreviewProvider::class, HeicPreviewProvider::MIMETYPE_REGEX);
     }
 
     public function boot(IBootContext $context): void
